@@ -47,3 +47,4 @@ class BasicDatabase():
     # 规定数据库执行 sql 的通用方法, 子类定义具体实现
     def exec(self, sql):
         self.sql = sql;
+        

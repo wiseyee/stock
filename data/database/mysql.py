@@ -44,3 +44,4 @@ class Mysql(BasicDatabase):
       self.cursor().close()
       self.connection().close()
       return result
+      
