@@ -1,5 +1,5 @@
 from conf.config import database_setting as db
-from db.tables import init_all_tables
+from bin.db.tables import init_all_tables
 import threading
 
 class Project():
