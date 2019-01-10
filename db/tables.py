@@ -1,9 +1,6 @@
-import sys
-sys.path.append('../..')
-from init.config import database_setting as db
-
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Text, String, Integer, Float, ForeignKey, create_engine
+from sqlalchemy.orm import sessionmaker
 
 '''
 定义所有数据库表
@@ -69,19 +66,21 @@ class StockCompany(Base):
     email       = Column(Text)
     employees   = Column(Integer, nullable = False)
 
-'''
-根据 config 中的配置信息链接数据库创建表
-'''
-db_type = db['type']
-db = db[db_type]
-connector = 'pymysql'
-user = db['user']
-password = db['password']
-host = db['host']
-port = db['port']
-db_name = db['db_name']
-encoding = db['encoding']
-db_desc = "{db_type}+{connector}://{user}:{password}@{host}:{port}/{db_name}".format(db_type = db_type, connector = connector, user = user, password = password, host = host, port = port, db_name = db_name)
 
-engine = create_engine(db_desc, encoding = 'utf-8', echo = True)
-Base.metadata.create_all(engine)
+def init_all_tables(db):
+    print('excute talbes setup command')
+    db_type = db['type']
+    db = db[db_type]
+    connector = 'pymysql'
+    user = db['user']
+    password = db['password']
+    host = db['host']
+    port = db['port']
+    db_name = db['db_name']
+    encoding = db['encoding']
+    db_desc = "{db_type}+{connector}://{user}:{password}@{host}:{port}/{db_name}".format(db_type = db_type, connector = connector, user = user, password = password, host = host, port = port, db_name = db_name)
+
+    engine = create_engine(db_desc, encoding = 'utf-8', echo = True)
+    Base.metadata.create_all(engine)
+
+    return sessionmaker()
