@@ -1,8 +1,8 @@
-from util.database.tables import StockBasic
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-
-class StockBasicUpdater():
-
-    def __init__():
-        pass
+def stock_basic_update(session, ts):
+    '''
+    1. get data1 from tushare
+    2. get data2 from database
+    3. check out the difference between data1 and data2
+    4. update the disame data into the stock_basic table
+    '''
+    pass
