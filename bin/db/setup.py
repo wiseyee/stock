@@ -32,9 +32,9 @@ class StockBasic(Base):
 class TradeCalendar(Base):
     '''
     交易日历
-    1.  交易所
-    2.  日期
-    3.  是否交易
+    1.  exchange (交易所)
+    2.  cal_date (日历日期)
+    3.  is_open (是否交易)
     '''
     __tablename__ = 'trade_calendar'
 
@@ -46,9 +46,18 @@ class TradeCalendar(Base):
 class StockCompany(Base):
     '''
     上市公司基本信息
-    1.  交易所
-    2.  日期
-    3.  是否交易
+    1.  ts_code (tushare 代码)
+    2.  exchange (交易所)
+    3.  chairman (法人代表)
+    4.  manager (总经理)
+    5.  secretary (董秘)
+    6.  reg_capital (注册资本)
+    7.  setup_date (注册日期)
+    8.  province (所在省份)
+    9.  city (所在城市)
+    10. website (公司网站)
+    11. email (电子邮件)
+    12. employees (员工人数)
     '''
     __tablename__ = 'stock_company'
 
@@ -65,6 +74,35 @@ class StockCompany(Base):
     website     = Column(Text)
     email       = Column(Text)
     employees   = Column(Integer, nullable = False)
+
+class StockDaily(Base):
+    '''
+    股票日线数据
+    1.  ts_code (tushare 代码)
+    2.  trade_date (交易日期)
+    3.  open (开盘价)
+    4.  high (最高价)
+    5.  low (最低价)
+    6.  close (收盘价)
+    7.  pre_close (昨收价)
+    8.  change (涨跌额)
+    9.  pct_chg (涨跌幅)
+    10. vol (成交量)
+    11. amount (成交额)
+    '''
+    id = Column(Integer, primary_key = True, autoincrement = True)
+    ts_code = Column(String(9), nullable = False)
+    trade_date = Column(String(8), nullable = False)
+    open = Column(Float, nullable = False)
+    high = Column(Float, nullable = False)
+    low = Column(Float, nullable = False)
+    close = Column(Float, nullable = False)
+    pre_close = Column(Float, nullable = False)
+    change = Column(Float, nullable = False)
+    pct_chg = Column(Float, nullable = False)
+    vol = Column(Float, nullable = False)
+    amount = Column(Float, nullable = False)
+
 
 '''
 使用SQLAlchemy ORM 创建数据库表
