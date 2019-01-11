@@ -10,7 +10,7 @@ database_setting = {
         'port'      : 3306,
         'host'      : 'localhost',
         'user'      : 'root',
-        'password'  : '123456',
+        'password'  : 'wiseleaf',
         'db_name'   : 'stock',
         'encoding'  : 'utf-8'
     }

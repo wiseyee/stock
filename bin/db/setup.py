@@ -20,14 +20,14 @@ class StockBasic(Base):
     '''
     __tablename__ = 'stock_basic'
 
-    id          = Column(Integer, primary_key = True, autoincrement = True)
-    ts_code     = Column(String(9), nullable = False)
-    symbol      = Column(String(6), nullable = False)
-    name        = Column(String(8), nullable = False)
-    area        = Column(String(3), nullable = False)
-    industry    = Column(String(8), nullable = False)
-    market      = Column(String(3), nullable = False)
-    list_date   = Column(String(8), nullable = False)
+    id        = Column(Integer, primary_key = True, autoincrement = True)
+    ts_code   = Column(String(9), nullable = False)
+    symbol    = Column(String(6), nullable = False)
+    name      = Column(String(8), nullable = False)
+    area      = Column(String(3), nullable = False)
+    industry  = Column(String(8), nullable = False)
+    market    = Column(String(3), nullable = False)
+    list_date = Column(String(8), nullable = False)
 
 class TradeCalendar(Base):
     '''
