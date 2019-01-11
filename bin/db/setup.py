@@ -66,9 +66,10 @@ class StockCompany(Base):
     email       = Column(Text)
     employees   = Column(Integer, nullable = False)
 
-
+'''
+使用SQLAlchemy ORM 创建数据库表
+'''
 def init_all_tables(db):
-    print('excute talbes setup command')
     db_type = db['type']
     db = db[db_type]
     connector = 'pymysql'

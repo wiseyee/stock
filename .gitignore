@@ -1,5 +1,3 @@
 __pycache__/
-/init/config.py
+/conf/config.py
 /test.py
-*.sublime-project
-*.sublime-workspace
