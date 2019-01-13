@@ -15,4 +15,4 @@ class Project():
         # ts_data.to_sql(table, engine, if_exists='suspend')
 
     def run(self):
-        self.update_data()
+        print('project running')
