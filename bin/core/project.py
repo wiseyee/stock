@@ -1,8 +1,11 @@
-from conf.config import database_setting as db_setting, tushare_setting as ts_setting
+from conf.config import (database_setting as db_setting,
+                         tushare_setting as ts_setting)
 from bin.db.setup import init_all_tables
 import tushare as ts
 
+
 class Project():
+
     def __init__(self):
         init_all_tables(db_setting)
 
@@ -10,7 +13,7 @@ class Project():
         return ts.func(**args)
 
     def update_data_to_table(self, ts_data, table):
-        ts_data.to_sql(table, engine, if_exists = 'suspend')
+        # ts_data.to_sql(table, engine, if_exists='suspend')
 
     def run(self):
-        self.update_data();
+        self.update_data()
