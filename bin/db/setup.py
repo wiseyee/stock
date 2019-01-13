@@ -81,7 +81,7 @@ def init_all_tables(db):
     encoding = db['encoding']
     db_desc = "{db_type}+{connector}://{user}:{password}@{host}:{port}/{db_name}".format(db_type = db_type, connector = connector, user = user, password = password, host = host, port = port, db_name = db_name)
 
-    engine = create_engine(db_desc, encoding = 'utf-8', echo = True)
+    engine = create_engine(db_desc, encoding = encoding, echo = True)
     Base.metadata.create_all(engine)
 
     return sessionmaker()
