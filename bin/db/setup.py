@@ -90,6 +90,7 @@ class StockDaily(Base):
     10. vol (成交量)
     11. amount (成交额)
     '''
+    __tablename__ = 'daily'
     id = Column(Integer, primary_key = True, autoincrement = True)
     ts_code = Column(String(9), nullable = False)
     trade_date = Column(String(8), nullable = False)
