@@ -1,10 +1,6 @@
-
-
-def update(session, ts):
+def update(engine, ts, data, table):
     '''
-    1. get data1 from tushare
-    2. get data2 from database
-    3. check out the difference between data1 and data2
-    4. update the disame data into the stock_basic table
+    1. get data from tushare
+    2. use the tushare.to_sql func to update data to table
     '''
     print(' first using {ts} to get data then using {session} to update database'.format(ts = ts, session = session))
