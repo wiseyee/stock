@@ -13,6 +13,7 @@ class Project():
 
     def update_data_to_table(self, ts_data, table):
         # ts_data.to_sql(table, engine, if_exists='suspend')
+        pass
 
     def run(self):
         print('project running')
