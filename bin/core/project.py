@@ -9,10 +9,9 @@ class Project():
         init_all_tables(db_setting)
 
     def load_data_from_ts(self, method, **args):
-        return ts.func(**args)
+        pass
 
     def update_data_to_table(self, ts_data, table):
-        # ts_data.to_sql(table, engine, if_exists='suspend')
         pass
 
     def run(self):
