@@ -1,19 +1,20 @@
 import tushare as ts
-from conf.config import database_setting as db_setting, tushare_setting as ts_setting
-from bin.db.setup import init_all_tables
+from conf.config import (database_setting as db_setting,
+                         tushare_setting as ts_setting)
+from data.init import init_all_tables
+from data.update import DataUpdater
 
 
 class Project():
-    engine = None
+    tools = {}
 
+    # init the tools for project
     def __init__(self):
-        self.engine = init_all_tables(db_setting)
+        self.tools['engine'] = init_all_tables(db_setting)
+        self.tools['ts'] = ts.pro_api(ts_setting['token'])
 
-    def load_data_from_ts(self, method, **args):
-        pass
-
-    def update_data_to_table(self, ts_data, table):
-        pass
-
+    # run the schedule to process data in a specific cycle
     def run(self):
-        print('project running')
+        updater = DataUpdater(engine=self.tools['engine'],
+                              ts=self.tools['ts'])
+        updater.update_every_working_day()
