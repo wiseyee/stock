@@ -1,3 +1,3 @@
-from bin.core.project import Project
+from bin.project import Project
 
 Project().run()
