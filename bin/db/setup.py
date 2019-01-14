@@ -1,11 +1,11 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Text, String, Integer, Float, ForeignKey, create_engine
-from sqlalchemy.orm import sessionmaker
 
 '''
 定义所有数据库表
-''' 
+'''
 Base = declarative_base()
+
 
 class StockBasic(Base):
     '''
@@ -20,14 +20,15 @@ class StockBasic(Base):
     '''
     __tablename__ = 'stock_basic'
 
-    id        = Column(Integer, primary_key = True, autoincrement = True)
-    ts_code   = Column(String(9), nullable = False)
-    symbol    = Column(String(6), nullable = False)
-    name      = Column(String(8), nullable = False)
-    area      = Column(String(3), nullable = False)
-    industry  = Column(String(8), nullable = False)
-    market    = Column(String(3), nullable = False)
-    list_date = Column(String(8), nullable = False)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    ts_code = Column(String(9), nullable=False)
+    symbol = Column(String(6), nullable=False)
+    name = Column(String(8), nullable=False)
+    area = Column(String(3), nullable=False)
+    industry = Column(String(8), nullable=False)
+    market = Column(String(3), nullable=False)
+    list_date = Column(String(8), nullable=False)
+
 
 class TradeCalendar(Base):
     '''
@@ -38,10 +39,11 @@ class TradeCalendar(Base):
     '''
     __tablename__ = 'trade_calendar'
 
-    id       = Column(Integer, primary_key = True, autoincrement = True)
-    exchange = Column(String(4), nullable = False)
-    cal_date = Column(String(8), nullable = False)
-    is_open  = Column(Integer, nullable = False)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    exchange = Column(String(4), nullable=False)
+    cal_date = Column(String(8), nullable=False)
+    is_open = Column(Integer, nullable=False)
+
 
 class StockCompany(Base):
     '''
@@ -61,19 +63,20 @@ class StockCompany(Base):
     '''
     __tablename__ = 'stock_company'
 
-    id          = Column(Integer, primary_key = True, autoincrement = True)
-    ts_code     = Column(String(9), nullable = False)
-    exchange    = Column(String(4), nullable = False)
-    chairman    = Column(String(10))
-    manager     = Column(String(10))
-    secretary   = Column(String(10))
-    reg_capital = Column(Float, nullable = False)
-    setup_date  = Column(String(8),nullable = False)
-    province    = Column(String(5),nullable = False)
-    city        = Column(String(10), nullable = False)
-    website     = Column(Text)
-    email       = Column(Text)
-    employees   = Column(Integer, nullable = False)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    ts_code = Column(String(9), nullable=False)
+    exchange = Column(String(4), nullable=False)
+    chairman = Column(String(10))
+    manager = Column(String(10))
+    secretary = Column(String(10))
+    reg_capital = Column(Float, nullable=False)
+    setup_date = Column(String(8), nullable=False)
+    province = Column(String(5), nullable=False)
+    city = Column(String(10), nullable=False)
+    website = Column(Text)
+    email = Column(Text)
+    employees = Column(Integer, nullable=False)
+
 
 class StockDaily(Base):
     '''
@@ -91,23 +94,25 @@ class StockDaily(Base):
     11. amount (成交额)
     '''
     __tablename__ = 'daily'
-    id = Column(Integer, primary_key = True, autoincrement = True)
-    ts_code = Column(String(9), nullable = False)
-    trade_date = Column(String(8), nullable = False)
-    open = Column(Float, nullable = False)
-    high = Column(Float, nullable = False)
-    low = Column(Float, nullable = False)
-    close = Column(Float, nullable = False)
-    pre_close = Column(Float, nullable = False)
-    change = Column(Float, nullable = False)
-    pct_chg = Column(Float, nullable = False)
-    vol = Column(Float, nullable = False)
-    amount = Column(Float, nullable = False)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    ts_code = Column(String(9), nullable=False)
+    trade_date = Column(String(8), nullable=False)
+    open = Column(Float, nullable=False)
+    high = Column(Float, nullable=False)
+    low = Column(Float, nullable=False)
+    close = Column(Float, nullable=False)
+    pre_close = Column(Float, nullable=False)
+    change = Column(Float, nullable=False)
+    pct_chg = Column(Float, nullable=False)
+    vol = Column(Float, nullable=False)
+    amount = Column(Float, nullable=False)
 
 
 '''
-使用SQLAlchemy ORM 创建数据库表
+使用 SQLAlchemy 创建数据库表
 '''
+
+
 def init_all_tables(db):
     db_type = db['type']
     db = db[db_type]
@@ -118,9 +123,15 @@ def init_all_tables(db):
     port = db['port']
     db_name = db['db_name']
     encoding = db['encoding']
-    db_desc = "{db_type}+{connector}://{user}:{password}@{host}:{port}/{db_name}".format(db_type = db_type, connector = connector, user = user, password = password, host = host, port = port, db_name = db_name)
+    db_desc = "{db_type}+{connector}://{user}:{password}@{host}:{port}/{db_name}".format(db_type=db_type,
+                                                                                         connector=connector,
+                                                                                         user=user,
+                                                                                         password=password,
+                                                                                         host=host,
+                                                                                         port=port,
+                                                                                         db_name=db_name)
 
-    engine = create_engine(db_desc, encoding = encoding, echo = True)
+    engine = create_engine(db_desc, encoding=encoding, echo=True)
     Base.metadata.create_all(engine)
 
-    return sessionmaker()
+    return engine
