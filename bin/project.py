@@ -1,20 +1,15 @@
-import tushare as ts
-from conf.config import (database_setting as db_setting,
-                         tushare_setting as ts_setting)
-from data.init import init_all_tables
+from bin.util import Util
+from data.init import DataBuilder
 from data.update import DataUpdater
 
 
-class Project():
-    tools = {}
-
-    # init the tools for project
+class Project(Util):
+    # 初始化项目组件
     def __init__(self):
-        self.tools['engine'] = init_all_tables(db_setting)
-        self.tools['ts'] = ts.pro_api(ts_setting['token'])
+        data_builder = DataBuilder()  # 实例化 DataBuilder
+        data_builder.build_tables()   # 创建数据库表
 
-    # run the schedule to process data in a specific cycle
+    # 运行主进程
     def run(self):
-        updater = DataUpdater(engine=self.tools['engine'],
-                              ts=self.tools['ts'])
-        updater.update_every_working_day()
+        data_updater = DataUpdater()  # 实例化 DataUpdater
+        print(self.utils)

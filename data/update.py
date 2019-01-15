@@ -1,28 +1,25 @@
 from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.schedulers.blocking import BlockingScheduler
+
+from bin.util import Util
 
 
-class DataUpdater():
-    engine = None
-    ts = None
-    jobs = {}
+# 数据更新操作器
+class DataUpdater(Util):
 
-    def __init__(self, engine, ts):
-        self.engine = engine
-        self.ts = ts
+    def __init__(self):
+        # 将 BackgroundScheduler BlockingScheduler 添加进组件池
+        self.add_utils({'background_scheduler':BackgroundScheduler(),
+                        'blocking_scheduler':BlockingScheduler()})
 
-    # 执行所有更新操作
-    def update_every_working_day(self):
-        scheduler = BackgroundScheduler()
-        self.jobs['stock_basic'] = scheduler.add_job(
-            self.update_stock_basic, 'cron', day_of_week='0-4', hour=17)
-        self.jobs['trade_calendar'] = scheduler.add_job(
-            self.update_trade_calendar, 'cron', day_of_week='0-4', hour=17)
-        self.jobs['stock_company'] = scheduler.add_job(
-            self.update_stock_company, 'cron', day_of_week='0-4', hour=17)
-        self.jobs['stock_daily'] = scheduler.add_job(
-            self.update_stock_daily, 'cron', day_of_week='0-4', hour=17)
-        scheduler.start()
-        # scheduler.print_jobs()
+
+    # 后台并发线程更新
+    def update_in_background_schedule(self):
+        pass
+
+    # 主线程阻塞式更新
+    def update_in_blocking_schedule(self):
+        pass
 
     # 更新 stock_basic 表
     def update_stock_basic(self):

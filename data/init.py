@@ -1,34 +1,43 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Text, String, Integer, Float, ForeignKey, create_engine
+from sqlalchemy.orm import sessionmaker
+import tushare as ts
+
+from bin.util import Util
+from conf.config import (database_setting as db_setting,
+                         tushare_setting as ts_setting)
+
+
+# 数据构造器
+# 构造数据库表
+# 实例化数据库操作常用组件存入组件池
+class DataBuilder(Util):
+    # 根据 config 配置信息生成数据库常用组件
+    def __init__(self):
+        self.db_type = db_setting['type']
+        self.db_connector = db_setting['connector']
+        self.db = db_setting[self.db_type]
+        self.db_desc = "{type}+{connector}://{user}:{password}@{host}:{port}/{name}".format(type=self.db_type,
+                                                                                            connector=self.db_connector,
+                                                                                            user=self.db['user'],
+                                                                                            password=self.db['password'],
+                                                                                            host=self.db['host'],
+                                                                                            port=self.db['port'],
+                                                                                            name=self.db['name'])
+        engine = create_engine(self.db_desc,
+                               encoding=self.db['encoding'],
+                               echo=self.db['debug'])           # SQLAlchemy engine
+        session = sessionmaker(bind=engine)                     # SQLAlchemy session
+
+        # 将 engine session 添加进组件池
+        self.add_utils({'engine':engine, 'session':session})
+
+    # 创建所有 ORM 数据库表
+    def build_tables(self):  
+        Base.metadata.create_all(self.get_util('engine'))
+
 
 Base = declarative_base()
-
-
-def init_all_tables(db):
-    """ 
-    创建所有数据库表
-    """
-    db_type = db['type']
-    db = db[db_type]
-    connector = 'pymysql'
-    user = db['user']
-    password = db['password']
-    host = db['host']
-    port = db['port']
-    db_name = db['db_name']
-    encoding = db['encoding']
-    db_desc = "{db_type}+{connector}://{user}:{password}@{host}:{port}/{db_name}".format(db_type=db_type,
-                                                                                         connector=connector,
-                                                                                         user=user,
-                                                                                         password=password,
-                                                                                         host=host,
-                                                                                         port=port,
-                                                                                         db_name=db_name)
-
-    engine = create_engine(db_desc, encoding=encoding, echo=True)
-    Base.metadata.create_all(engine)
-
-    return engine
 
 
 class StockBasic(Base):
@@ -46,12 +55,12 @@ class StockBasic(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     ts_code = Column(String(9), nullable=False)
-    symbol = Column(String(6), nullable=False)
-    name = Column(String(8), nullable=False)
-    area = Column(String(3), nullable=False)
-    industry = Column(String(8), nullable=False)
-    market = Column(String(3), nullable=False)
-    list_date = Column(String(8), nullable=False)
+    symbol = Column(String(6))
+    name = Column(String(8))
+    area = Column(String(3))
+    industry = Column(String(8))
+    market = Column(String(3))
+    list_date = Column(String(8))
 
 
 class TradeCalendar(Base):
@@ -64,9 +73,9 @@ class TradeCalendar(Base):
     __tablename__ = 'trade_calendar'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    exchange = Column(String(4), nullable=False)
-    cal_date = Column(String(8), nullable=False)
-    is_open = Column(Integer, nullable=False)
+    exchange = Column(String(4))
+    cal_date = Column(String(8))
+    is_open = Column(Integer)
 
 
 class StockCompany(Base):
@@ -89,17 +98,17 @@ class StockCompany(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     ts_code = Column(String(9), nullable=False)
-    exchange = Column(String(4), nullable=False)
+    exchange = Column(String(4))
     chairman = Column(String(10))
     manager = Column(String(10))
     secretary = Column(String(10))
-    reg_capital = Column(Float, nullable=False)
-    setup_date = Column(String(8), nullable=False)
-    province = Column(String(5), nullable=False)
-    city = Column(String(10), nullable=False)
+    reg_capital = Column(Float)
+    setup_date = Column(String(8))
+    province = Column(String(5))
+    city = Column(String(10))
     website = Column(Text)
     email = Column(Text)
-    employees = Column(Integer, nullable=False)
+    employees = Column(Integer)
 
 
 class StockDaily(Base):
@@ -118,15 +127,118 @@ class StockDaily(Base):
     11. amount (成交额)
     """
     __tablename__ = 'stock_daily'
+
     id = Column(Integer, primary_key=True, autoincrement=True)
     ts_code = Column(String(9), nullable=False)
-    trade_date = Column(String(8), nullable=False)
-    open = Column(Float, nullable=False)
-    high = Column(Float, nullable=False)
-    low = Column(Float, nullable=False)
-    close = Column(Float, nullable=False)
-    pre_close = Column(Float, nullable=False)
-    change = Column(Float, nullable=False)
-    pct_chg = Column(Float, nullable=False)
-    vol = Column(Float, nullable=False)
-    amount = Column(Float, nullable=False)
+    trade_date = Column(String(8))
+    open = Column(Float)
+    high = Column(Float)
+    low = Column(Float)
+    close = Column(Float)
+    pre_close = Column(Float)
+    change = Column(Float)
+    pct_chg = Column(Float)
+    vol = Column(Float)
+    amount = Column(Float)
+
+
+class StockWeekly(Base):
+    """ 
+    股票周线行情
+    1.  ts_code tushare 代码
+    2.  trade_date 交易日期
+    3.  close 收盘价
+    4.  open 开盘价
+    5.  high 最高价
+    6.  low 最低价
+    7.  pre_close 昨收盘价
+    8.  change 涨跌额
+    9.  pct_chg 涨跌幅
+    10. vol 成交量
+    11. amount 成交额
+    """
+    __tablename__ = 'stock_weekly'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    ts_code = Column(String(9), nullable=False)
+    close = Column(Float)
+    open = Column(Float)
+    high = Column(Float)
+    low = Column(Float)
+    pre_close = Column(Float)
+    change = Column(Float)
+    pct_chg = Column(Float)
+    vol = Column(Float)
+    amount = Column(Float)
+
+
+class StockMonthly(Base):
+    """ 
+    股票月线行情
+    1.  ts_code tushare 代码
+    2.  trade_date 交易日期
+    3.  close 收盘价
+    4.  open 开盘价
+    5.  high 最高价
+    6.  low 最低价
+    7.  pre_close 昨收盘价
+    8.  change 月涨跌额
+    9.  pct_chg 月涨跌幅
+    10. vol 月成交量
+    11. amount 月成交额
+    """
+    __tablename__ = 'stock_monthly'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    ts_code = Column(String(9), nullable=False)
+    trade_date = Column(String(8))
+    close = Column(Float)
+    open = Column(Float)
+    high = Column(Float)
+    low = Column(Float)
+    pre_close = Column(Float)
+    change = Column(Float)
+    pct_chg = Column(Float)
+    vol = Column(Float)
+    amount = Column(Float)
+
+
+class DailyBasic(Base):
+    """ 
+    股票每日指标
+    1.  ts_code tushare 代码
+    2.  trade_date 交易日期
+    3.  close 收盘价
+    4.  turnover_rate 换手率 %
+    5.  turnover_rate_f 流通盘换手率 %
+    6.  volume_ratio 量比
+    7.  pe 市盈率
+    8.  pe_ttm 动态市盈率
+    9.  pb 市净率
+    10. ps 市销率
+    11. ps_ttm 动态市销率
+    12. total_share 总股本(万)
+    13. float_sahre 流通股本(万)
+    14. free_share 自由流通股本(万)
+    15. total_mv 总市值(万元)
+    16. circ_mv 流通市值(万元)
+    """
+    __tablename__ = 'daily_basic'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    ts_code = Column(String(9), nullable=False)
+    trade_date = Column(String(8))
+    close = Column(Float)
+    turnover_rate = Column(Float)
+    turnover_rate_f = Column(Float)
+    volume_ratio = Column(Float)
+    pe = Column(Float)
+    pe_ttm = Column(Float)
+    pb = Column(Float)
+    ps = Column(Float)
+    ps_ttm = Column(Float)
+    total_share = Column(Float)
+    float_sahre = Column(Float)
+    free_share = Column(Float)
+    total_mv = Column(Float)
+    circ_mv = Column(Float)
