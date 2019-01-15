@@ -1,11 +1,9 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Text, String, Integer, Float, ForeignKey, create_engine
 from sqlalchemy.orm import sessionmaker
-import tushare as ts
 
 from bin.util import Util
-from conf.config import (database_setting as db_setting,
-                         tushare_setting as ts_setting)
+from conf.config import database_setting as db_setting
 
 
 # 数据构造器
@@ -24,16 +22,17 @@ class DataBuilder(Util):
                                                                                             host=self.db['host'],
                                                                                             port=self.db['port'],
                                                                                             name=self.db['name'])
-        engine = create_engine(self.db_desc,
-                               encoding=self.db['encoding'],
-                               echo=self.db['debug'])           # SQLAlchemy engine
-        session = sessionmaker(bind=engine)                     # SQLAlchemy session
+        # SQLAlchemy engine
+        engine = create_engine(
+            self.db_desc, encoding=self.db['encoding'], echo=self.db['debug'])
+        # SQLAlchemy session
+        session = sessionmaker(bind=engine)
 
         # 将 engine session 添加进组件池
-        self.add_utils({'engine':engine, 'session':session})
+        self.add_utils({'engine': engine, 'session': session})
 
     # 创建所有 ORM 数据库表
-    def build_tables(self):  
+    def build_tables(self):
         Base.metadata.create_all(self.get_util('engine'))
 
 

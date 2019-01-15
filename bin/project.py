@@ -1,6 +1,6 @@
 from bin.util import Util
-from data.init import DataBuilder
-from data.update import DataUpdater
+from data.builder import DataBuilder
+from data.updater import DataUpdater
 
 
 class Project(Util):
