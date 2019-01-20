@@ -1,15 +1,9 @@
-from bin.util import Util
-from data.builder import DataBuilder
-from data.updater import DataUpdater
+from bin.interface.associated import Associated
 
 
-class Project(Util):
-    # 初始化项目组件
-    def __init__(self):
-        data_builder = DataBuilder()  # 实例化 DataBuilder
-        data_builder.build_tables()   # 创建数据库表
-
-    # 运行主进程
+# 项目框架，按流程调度各功能模块完成具体任务
+class Project(Associated):
     def run(self):
-        data_updater = DataUpdater()  # 实例化 DataUpdater
-        print(self.utils)
+        """ 项目对外运行接口 """
+        db = self.pivot.builder('Database')
+        db.test()

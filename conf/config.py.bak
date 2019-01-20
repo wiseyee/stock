@@ -1,19 +1,18 @@
-# 数据库设置
-database_setting = {
-    'type': 'mysql',                    # 数据库类型
-    'connector': 'pymysql',             # 数据库连接器
-    'mysql': {                          # MYSQL 数据库配置信息
-        'port': 3306,                   # 数据库端口
-        'host': 'localhost',            # 数据库地址
-        'user': 'root',                 # 数据库用户名
-        'password': 'your_password',    # 数据库密码
-        'name': 'stock',                # 数据库名
-        'encoding': 'utf-8',            # 数据库编码
-        'debug': True                   # 是否启用调试模式
+setting = {
+    # 数据库设置
+    'db': {
+        'type': 'mysql',            # 数据库类型
+        'connector': 'pymysql',     # 数据库连接驱动
+        'host': 'localhost',        # 数据库地址
+        'port': 3306,               # 数据库端口
+        'user': 'root',             # 数据库用户
+        'password': '******',       # 数据库密码
+        'name': 'stock',            # 数据库名称
+        'encoding': 'utf-8',        # 数据库编码
+        'debug': True               # 是否开启调试模式
+    },
+    # tushare 设置
+    'tushare': {
+        'token': 'your_token'  # tushare.pro API 口令
     }
-}
-
-# tushare 设置
-tushare_setting = {
-    'token': 'your_owen_token'          # tushare pro_api 口令
 }
