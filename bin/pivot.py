@@ -14,11 +14,11 @@ class Pivot:
     # 通过给定类型寻找对应类
     def __get_class_from(self, class_type, class_name):
         # 1. 在以加载容器中寻找
-        class_loaded = eval('self.__' + class_type + '_loaded')
+        class_loaded = eval('self._Pivot__' + class_type + '_loaded')
         if class_name in class_loaded:
             return class_loaded[class_name]
         # 2. 寻找加载路径是否存在，如果存在则动态加载并加入已加载容器
-        class_import_path = eval('self.__' + class_type + '_import_path')
+        class_import_path = eval('self._Pivot__' + class_type + '_import_path')
         if class_name in class_import_path:
             target = Loader.load(class_import_path[class_name], class_name)
             class_loaded[class_name] = target
