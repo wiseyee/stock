@@ -1,9 +1,8 @@
 from bin.interface.sharable import Sharable
-from bin.interface.associated import Associated
 
 
 # 仓库
-class Repo(Sharable, Associated):
+class Repo(Sharable):
     __pool = {}  # 存储池
 
     def update(self, *args, **kargs):

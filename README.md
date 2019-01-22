@@ -16,4 +16,11 @@
 1. 调优 bin.util.paser 增加斜杠转点方法，用于生成命名空间，exclude 规则增加 * 匹配方式
 2. 添加 数据库 sqlalchemy 模型，完成数据库表初始化方法
 
+# 2019-01-22
+
+1. 放弃 builder factory 的思路，改为 api implement
+2. api 存放各类接口，implement 存放具体执行过程
+3. 将本地数据库 db 和外部数据接口 api 全部归纳进 bin.api.data
+4. 由于数据每天都需要更新，引入 apscheduler 根据每张表的具体需求设计循环的定时更新任务
+
 以上内容随时更新 学到哪 想到哪 更新到哪
