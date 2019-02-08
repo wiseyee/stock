@@ -18,9 +18,25 @@
 
 # 2019-01-22
 
-1. 放弃 builder factory 的思路，改为 api implement
-2. api 存放各类接口，implement 存放具体执行过程
+1. 放弃 builder factory 的思路，改为 factory implement
+2. factory 存放返回内容的对象，implement 存放具体执行过程
 3. 将本地数据库 db 和外部数据接口 api 全部归纳进 bin.api.data
 4. 由于数据每天都需要更新，引入 apscheduler 根据每张表的具体需求设计循环的定时更新任务
+
+# 2019-01-23
+
+1. 由于使用 apscheduler 运行后台定时任务，需要日志记录运行情况，将 logging 包装成日志工具放在 bin.util.logger
+2. 由于每张表的特性需要单独编写更新规则，将每个表的更新过程独立出来放在 bin/implement/update 下
+3. 由于 daily_basic 数据过于庞大只能随读随存，API 限制访问 200次/每分钟，使用 try exception 捕获超时，隔一分钟后重新调用自身
+
+# 2019-01-25
+
+1. daily_basic 表数据更新过程中发现问题，读取已存在数据时用 sqlalchemy session 将 id 字段 desc 排序，取 first() 效率最高
+2. 数据准备工作基本完成，开始学习数据挖掘、机器学习方面知识
+
+# 2019-02-01
+
+1. 再一次规划了一遍目录结构，数据库的初始化，每张表的更新规则都单独拿出来了，数据库相关的都放在了单独的 data 文件夹下
+2. 以后的机器学习方面的再单独放一个文件夹，具体模型分类管理，方便总的策略分别调用。
 
 以上内容随时更新 学到哪 想到哪 更新到哪

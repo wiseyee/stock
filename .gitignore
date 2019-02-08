@@ -1,6 +1,7 @@
 __pycache__/
 /conf/config.py
 /test.py
+/log/*
 *.sublime-project
 *.sublime-workspace
 .vscode/

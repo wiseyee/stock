@@ -1,13 +1,14 @@
-from db.model.base import Base
 from sqlalchemy import Column, Text, String, Integer, Float, ForeignKey
+from data.db import ModelBase
 
 
-# 股票周线行情
-class StockWeekly(Base):
+class StockWeekly(ModelBase):
+    """ 股票周线行情 """
     __tablename__ = 'stock_weekly'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    ts_code = Column(String(9), nullable=False)  # ts 代码
+    ts_code = Column(String(9))  # ts 代码
+    trade_date = Column(String(8))  # 交易日期
     open = Column(Float)  # 开盘价
     high = Column(Float)  # 最高价
     low = Column(Float)  # 最低价

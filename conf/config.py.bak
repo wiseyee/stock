@@ -9,10 +9,16 @@ setting = {
         'password': '******',       # 数据库密码
         'name': 'stock',            # 数据库名称
         'encoding': 'utf-8',        # 数据库编码
-        'debug': True               # 是否开启调试模式
+        'debug': True               # 数据库调试模式
     },
     # tushare 设置
     'tushare': {
         'token': 'your_token'  # tushare.pro API 口令
+    },
+    # log 设置
+    'log': {
+        'show_in_console': True,  # 同时在控制台显示
+        'level': 'DEBUG',         # 日志记录级别，可用选项 DEBUG INFO WARNING ERROR CRITICAL
+        'path': 'log'             # log 文件存放路径
     }
 }
