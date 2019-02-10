@@ -19,19 +19,19 @@ class Logger():
     fmt = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
     # 控制台 handler
     console_handler = logging.StreamHandler(os.sys.stdout)
-    # 文件 handler
-    filename = time.strftime('%Y-%m-%d', time.localtime()) + '.log'
+    # log 文件存放路径
     path = setting['log']['path']
-    filepath = os.path.join(path, filename)
-    file_handler = logging.FileHandler(filepath)
     # logger 实例对象
     logger = None
 
     def __config_logger(self):
         """ 根据 config 配置 logger """
         self.logger.setLevel(self.level)
-        self.file_handler.setFormatter(self.fmt)
-        self.logger.addHandler(self.file_handler)
+        filename = time.strftime('%Y-%m-%d', time.localtime()) + '.log'
+        filepath = os.path.join(self.path, filename)
+        file_handler = logging.FileHandler(filepath)
+        file_handler.setFormatter(self.fmt)
+        self.logger.addHandler(file_handler)
         # 根据配置文件选择是否要输出到控制台
         if setting['log']['show_in_console']:
             self.console_handler.setFormatter(self.fmt)
