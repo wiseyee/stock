@@ -13,7 +13,7 @@ from util.dater import Dater
 class DailyBasicUpdater:
     """ daily_basic 数据更新器 """
 
-    @record_update
+    @record_update(model=DailyBasic)
     def start(self):
         # 设置读取数据的开始、结束日期
         start_date = ''
