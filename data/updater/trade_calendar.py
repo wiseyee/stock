@@ -15,7 +15,7 @@ class TradeCalendarUpdater:
         """ 更新 trade_calendar 表 """
         # 查看今日是否已经更新过
         update_record = session.query(UpdateRecord).filter(
-            UpdateRecord.table == TradeCalendar.__tablename__).one()
+            UpdateRecord.table == TradeCalendar.__tablename__).first()
         if update_record and update_record.last_updating == Dater.today():
             return
 
@@ -49,7 +49,7 @@ class TradeCalendarUpdater:
 
         # 记录最近更新日期
         record = session.query(UpdateRecord).filter(
-            UpdateRecord.table == TradeCalendar.__tablename__).one()
+            UpdateRecord.table == TradeCalendar.__tablename__).first()
         record.last_updating = Dater.today()
         session.commit()
 

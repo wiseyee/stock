@@ -13,7 +13,7 @@ class StockCompanyUpdater:
     def start(self):
         # 查看今日是否已经更新过
         update_record = session.query(UpdateRecord).filter(
-            UpdateRecord.table == StockCompany.__tablename__).one()
+            UpdateRecord.table == StockCompany.__tablename__).first()
         if update_record and update_record.last_updating == Dater.today():
             return
 
@@ -35,6 +35,6 @@ class StockCompanyUpdater:
 
         # 记录最近更新日期
         record = session.query(UpdateRecord).filter(
-            UpdateRecord.table == StockCompany.__tablename__).one()
+            UpdateRecord.table == StockCompany.__tablename__).first()
         record.last_updating = Dater.today()
         session.commit()
