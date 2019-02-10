@@ -8,7 +8,7 @@ def record_update(model):
     def wrapper(fn):
         def inner_wrapper(*args, **kargs):
             # 如果记录中对应表近日已更新直接返回
-            record = session.query(model).filter(
+            record = session.query(UpdateRecord).filter(
                 UpdateRecord.table == model.__tablename__).first()
             if record and record.last_updating == Dater.today():
                 return
