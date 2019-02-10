@@ -4,13 +4,21 @@ from data.db import engine, session
 from data.api import tushare_pro as api
 from data.model.concept import Concept
 from data.model.concept_detail import ConceptDetail
+from data.model.update_record import UpdateRecord
 from util.logger import Logger
+from util.dater import Dater
 
 
 class ConceptDetailUpdater:
     """ concept_detail 数据更新器 """
 
     def start(self):
+        # 查看今日是否已经更新过
+        update_record = session.query(UpdateRecord).filter(
+            UpdateRecord.table == ConceptDetail.__tablename__).one()
+        if update_record and update_record.last_updating == Dater.today():
+            return
+
         # 获得本地 concept 列表
         db_data = pd.read_sql_table('concept', engine)
         if db_data.empty:
@@ -27,6 +35,12 @@ class ConceptDetailUpdater:
         if not ta_data.empty:
             ta_data.to_sql('concept_detail', engine,
                            if_exists='replace', index_label='id')
+
+        # 记录最近更新日期
+        record = session.query(UpdateRecord).filter(
+            UpdateRecord.table == ConceptDetail.__tablename__).one()
+        record.last_updating = Dater.today()
+        session.commit()
 
     def __get_data(self, code, i=0):
         """ 获得指定概念代号的股票明细 """
