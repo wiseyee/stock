@@ -28,10 +28,9 @@ class DailyBasicUpdater:
         record = session.query(DailyBasic).order_by(
             DailyBasic.id.desc()).first()
         if record:
-            latest_date = record.trade_date
-            if latest_date >= end_date:
+            start_date = Dater.offset(record.trade_date, 1)
+            if start_date > end_date:
                 return
-            start_date = latest_date
 
         # 获取交易日历中开始到结束日期范围内的开市日期
         records = session.query(TradeCalendar).filter(and_(TradeCalendar.cal_date >= start_date,

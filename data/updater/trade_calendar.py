@@ -27,10 +27,9 @@ class TradeCalendarUpdater:
         record = session.query(TradeCalendar).order_by(
             TradeCalendar.id.desc()).first()
         if record:
-            latest_date = record.cal_date
-            if latest_date >= end_date:
+            start_date = Dater.offset(record.cal_date, 1)
+            if start_date > end_date:
                 return
-            start_date = Dater.offset(latest_date, 1)
 
         # 对比最新日期和目标日期，继续补足目标数据
         ta_data = pd.DataFrame()
