@@ -25,39 +25,39 @@ class Updater:
 
         """ trade_calendar：每天，00:00 """
         self.jobs['update_trade_calendar'] = sche.add_job(
-            self.__update_trade_calendar, 'cron', day='*')
+            self.__update_trade_calendar, 'cron', day='*', misfire_grace_time=30)
 
         """ stock_basic ：每天，00:00 """
         self.jobs['update_stock_basic'] = sche.add_job(
-            self.__update_stock_basic, 'cron', day='*')
+            self.__update_stock_basic, 'cron', day='*', misfire_grace_time=30)
 
         """ stock_company ：每天，00:00 """
         self.jobs['update_stock_company'] = sche.add_job(
-            self.__update_stock_company, 'cron', day='*')
+            self.__update_stock_company, 'cron', day='*', misfire_grace_time=30)
 
         """ daily_basic is running：工作日，17:30 """
         self.jobs['update_daily_basic'] = sche.add_job(
-            self.__update_daily_basic, 'cron', day_of_week='mon-fri', hour='17', minute='30')
+            self.__update_daily_basic, 'cron', day_of_week='mon-fri', hour='17', minute='30', misfire_grace_time=30)
 
         """ stock_daily is running：工作日，17:30 """
         self.jobs['update_stock_daily'] = sche.add_job(
-            self.__update_stock_daily, 'cron', day_of_week='mon-fri', hour='17', minute='30')
+            self.__update_stock_daily, 'cron', day_of_week='mon-fri', hour='17', minute='30', misfire_grace_time=30)
 
         """ stock_weekly is running：每周6，00:00 """
         self.jobs['update_stock_weekly'] = sche.add_job(
-            self.__update_stock_weekly, 'cron', day_of_week='sat')
+            self.__update_stock_weekly, 'cron', day_of_week='sat', misfire_grace_time=30)
 
         """ stock_monthly is running：每月，第一天 """
         self.jobs['update_stock_monthly'] = sche.add_job(
-            self.__update_stock_monthly, 'cron', month='*')
+            self.__update_stock_monthly, 'cron', month='*', misfire_grace_time=30)
 
         """ concept is running：每天 """
         self.jobs['update_concept'] = sche.add_job(
-            self.__update_concept, 'cron', day='*')
+            self.__update_concept, 'cron', day='*', misfire_grace_time=30)
 
         """ concept_detail is running：每天，01:00 """
         self.jobs['update_concept_detail'] = sche.add_job(
-            self.__update_concept_detail, 'cron', day='*', hour='1')
+            self.__update_concept_detail, 'cron', day='*', hour='1', misfire_grace_time=30)
 
         """ 开启所有计划任务 """
         sche.start()
